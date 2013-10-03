@@ -11,6 +11,7 @@ Pod::Spec.new do |s|
   s.requires_arc = true
   s.source_files = 'MWPhotoBrowser/Classes'
   s.resources = "MWPhotoBrowser/MWPhotoBrowser.bundle"
+  s.prefix_header_file = "MWPhotoBrowser/MWPhotoBrowser-Prefix.pch"
 
   s.frameworks = 'MessageUI', 'ImageIO', 'QuartzCore', 'Foundation'
 
