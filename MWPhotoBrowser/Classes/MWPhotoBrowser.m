@@ -149,7 +149,21 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
 	return self;
 }
 
+- (id)initWithDataSource:(id<MWPhotoBrowserDataSource>)dataSource {
+    if (self = [super init]) {
+        _dataSource = dataSource;
         [self _initialisation];
+    }
+    return self;
+}
+
+- (id)initWithDataSource:(id<MWPhotoBrowserDataSource>)dataSource delegate:(id<MWPhotoBrowserDelegate>)delegate {
+    if (self = [super init]) {
+        _dataSource = dataSource;
+        _delegate = delegate;
+        [self _initialisation];
+    }
+    return self;
 }
 
 - (id)initWithCoder:(NSCoder *)decoder {
@@ -617,8 +631,8 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
 
 - (NSUInteger)numberOfPhotos {
     if (_photoCount == NSNotFound) {
-        if ([_delegate respondsToSelector:@selector(numberOfPhotosInPhotoBrowser:)]) {
-            _photoCount = [_delegate numberOfPhotosInPhotoBrowser:self];
+        if ([_dataSource respondsToSelector:@selector(numberOfPhotosInPhotoBrowser:)]) {
+            _photoCount = [_dataSource numberOfPhotosInPhotoBrowser:self];
         }
     }
     if (_photoCount == NSNotFound) _photoCount = 0;
@@ -629,8 +643,8 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
     id <MWPhoto> photo = nil;
     if (index < _photos.count) {
         if ([_photos objectAtIndex:index] == [NSNull null]) {
-            if ([_delegate respondsToSelector:@selector(photoBrowser:photoAtIndex:)]) {
-                photo = [_delegate photoBrowser:self photoAtIndex:index];
+            if ([_dataSource respondsToSelector:@selector(photoBrowser:photoAtIndex:)]) {
+                photo = [_dataSource photoBrowser:self photoAtIndex:index];
             }
             if (photo) [_photos replaceObjectAtIndex:index withObject:photo];
         } else {

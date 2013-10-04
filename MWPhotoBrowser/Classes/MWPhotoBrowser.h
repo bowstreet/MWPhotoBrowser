@@ -22,10 +22,14 @@
 // Delgate
 @class MWPhotoBrowser;
 
-@protocol MWPhotoBrowserDelegate <NSObject>
+@protocol MWPhotoBrowserDataSource <NSObject>
 
 - (NSUInteger)numberOfPhotosInPhotoBrowser:(MWPhotoBrowser *)photoBrowser;
 - (id<MWPhoto>)photoBrowser:(MWPhotoBrowser *)photoBrowser photoAtIndex:(NSUInteger)index;
+
+@end
+
+@protocol MWPhotoBrowserDelegate <NSObject>
 
 @optional
 
@@ -40,6 +44,7 @@
 
 // Properties
 @property (nonatomic, weak) IBOutlet id<MWPhotoBrowserDelegate> delegate;
+@property (nonatomic, weak) IBOutlet id<MWPhotoBrowserDataSource> dataSource;
 @property (nonatomic) BOOL zoomPhotosToFill;
 @property (nonatomic) BOOL displayNavArrows;
 @property (nonatomic) BOOL displayActionButton;
@@ -47,6 +52,8 @@
 
 // Init
 - (id)initWithDelegate:(id <MWPhotoBrowserDelegate>)delegate;
+- (id)initWithDataSource:(id <MWPhotoBrowserDataSource>)dataSource;
+- (id)initWithDataSource:(id<MWPhotoBrowserDataSource>)dataSource delegate:(id<MWPhotoBrowserDelegate>)delegate;
 
 // Reloads the photo browser and refetches data
 - (void)reloadData;
