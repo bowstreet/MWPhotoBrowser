@@ -1284,7 +1284,11 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             emailer.modalPresentationStyle = UIModalPresentationPageSheet;
         }
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_6_0
+        [self presentViewController:emailer animated:YES completion:nil];
+#else
         [self presentModalViewController:emailer animated:YES];
+#endif
         [self hideProgressHUD:NO];
     }
 }

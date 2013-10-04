@@ -61,8 +61,13 @@ static const CGFloat labelPadding = 10;
     _label.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
     _label.opaque = NO;
     _label.backgroundColor = [UIColor clearColor];
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_6_0
+    _label.textAlignment = NSTextAlignmentCenter;
+    _label.lineBreakMode = NSLineBreakByWordWrapping;
+#else
     _label.textAlignment = UITextAlignmentCenter;
     _label.lineBreakMode = UILineBreakModeWordWrap;
+#endif
     _label.numberOfLines = 0;
     _label.textColor = [UIColor whiteColor];
     if (SYSTEM_VERSION_LESS_THAN(@"7")) {
