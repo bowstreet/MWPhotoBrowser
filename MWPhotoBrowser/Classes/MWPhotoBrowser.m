@@ -168,7 +168,9 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
 - (void)_initialisation {
     
     // Defaults
+#if __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_7_0
     self.wantsFullScreenLayout = YES;
+#endif
     self.hidesBottomBarWhenPushed = YES;
     _photoCount = NSNotFound;
     _currentPageIndex = 0;
@@ -390,10 +392,17 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
     if (SYSTEM_VERSION_LESS_THAN(@"5")) [self viewWillLayoutSubviews];
     
     // Status bar
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_7_0
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+        _previousStatusBarStyle = [[UIApplication sharedApplication] statusBarStyle];
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:animated];
+    }
+#else
     if (self.wantsFullScreenLayout && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         _previousStatusBarStyle = [[UIApplication sharedApplication] statusBarStyle];
         [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent animated:animated];
     }
+#endif
     
     // Navigation bar appearance
     if (!_viewIsActive && [self.navigationController.viewControllers objectAtIndex:0] != self) {
@@ -426,9 +435,15 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
     [self setControlsHidden:NO animated:NO permanent:YES];
     
     // Status bar
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_7_0
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+        [[UIApplication sharedApplication] setStatusBarStyle:_previousStatusBarStyle animated:animated];
+    }
+#else
     if (self.wantsFullScreenLayout && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         [[UIApplication sharedApplication] setStatusBarStyle:_previousStatusBarStyle animated:animated];
     }
+#endif
     
 	// Super
 	[super viewWillDisappear:animated];
@@ -987,7 +1002,9 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
     } else {
         
         // Status bar and nav bar positioning
+#if __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_7_0
         if (self.wantsFullScreenLayout) {
+#endif
             
             // Get status bar height if visible
             CGFloat statusBarHeight = 0;
@@ -1009,8 +1026,9 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
             CGRect navBarFrame = self.navigationController.navigationBar.frame;
             navBarFrame.origin.y = statusBarHeight;
             self.navigationController.navigationBar.frame = navBarFrame;
-            
+#if __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_7_0
         }
+#endif
         
     }
     
