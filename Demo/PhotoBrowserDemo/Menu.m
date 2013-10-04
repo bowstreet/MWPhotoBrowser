@@ -127,7 +127,7 @@
     self.photos = photos;
 	
 	// Create browser
-	MWPhotoBrowser *browser = [[MWPhotoBrowser alloc] initWithDelegate:self];
+	MWPhotoBrowser *browser = [[MWPhotoBrowser alloc] initWithDataSource:self delegate:self];
     browser.displayActionButton = YES;
     browser.displayNavArrows = NO;
     browser.wantsFullScreenLayout = YES;

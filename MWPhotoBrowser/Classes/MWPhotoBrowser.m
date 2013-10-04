@@ -23,7 +23,6 @@
 	// Data
     NSUInteger _photoCount;
     NSMutableArray *_photos;
-	NSArray *_depreciatedPhotoData; // Depreciated
 	
 	// Views
 	UIScrollView *_pagingScrollView;
@@ -150,12 +149,21 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
 	return self;
 }
 
-- (id)initWithPhotos:(NSArray *)photosArray {
-	if ((self = [self init])) {
-		_depreciatedPhotoData = photosArray;
+- (id)initWithDataSource:(id<MWPhotoBrowserDataSource>)dataSource {
+    if (self = [super init]) {
+        _dataSource = dataSource;
         [self _initialisation];
-	}
-	return self;
+    }
+    return self;
+}
+
+- (id)initWithDataSource:(id<MWPhotoBrowserDataSource>)dataSource delegate:(id<MWPhotoBrowserDelegate>)delegate {
+    if (self = [super init]) {
+        _dataSource = dataSource;
+        _delegate = delegate;
+        [self _initialisation];
+    }
+    return self;
 }
 
 - (id)initWithCoder:(NSCoder *)decoder {
@@ -623,10 +631,8 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
 
 - (NSUInteger)numberOfPhotos {
     if (_photoCount == NSNotFound) {
-        if ([_delegate respondsToSelector:@selector(numberOfPhotosInPhotoBrowser:)]) {
-            _photoCount = [_delegate numberOfPhotosInPhotoBrowser:self];
-        } else if (_depreciatedPhotoData) {
-            _photoCount = _depreciatedPhotoData.count;
+        if ([_dataSource respondsToSelector:@selector(numberOfPhotosInPhotoBrowser:)]) {
+            _photoCount = [_dataSource numberOfPhotosInPhotoBrowser:self];
         }
     }
     if (_photoCount == NSNotFound) _photoCount = 0;
@@ -637,10 +643,8 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
     id <MWPhoto> photo = nil;
     if (index < _photos.count) {
         if ([_photos objectAtIndex:index] == [NSNull null]) {
-            if ([_delegate respondsToSelector:@selector(photoBrowser:photoAtIndex:)]) {
-                photo = [_delegate photoBrowser:self photoAtIndex:index];
-            } else if (_depreciatedPhotoData && index < _depreciatedPhotoData.count) {
-                photo = [_depreciatedPhotoData objectAtIndex:index];
+            if ([_dataSource respondsToSelector:@selector(photoBrowser:photoAtIndex:)]) {
+                photo = [_dataSource photoBrowser:self photoAtIndex:index];
             }
             if (photo) [_photos replaceObjectAtIndex:index withObject:photo];
         } else {
@@ -652,8 +656,8 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
 
 - (MWCaptionView *)captionViewForPhotoAtIndex:(NSUInteger)index {
     MWCaptionView *captionView = nil;
-    if ([_delegate respondsToSelector:@selector(photoBrowser:captionViewForPhotoAtIndex:)]) {
-        captionView = [_delegate photoBrowser:self captionViewForPhotoAtIndex:index];
+    if ([_dataSource respondsToSelector:@selector(photoBrowser:captionViewForPhotoAtIndex:)]) {
+        captionView = [_dataSource photoBrowser:self captionViewForPhotoAtIndex:index];
     } else {
         id <MWPhoto> photo = [self photoAtIndex:index];
         if ([photo respondsToSelector:@selector(caption)]) {
