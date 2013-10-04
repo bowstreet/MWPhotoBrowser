@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "MWPhotoBrowser.h"
 
-@interface Menu : UITableViewController <MWPhotoBrowserDelegate> {
+@interface Menu : UITableViewController <MWPhotoBrowserDataSource, MWPhotoBrowserDelegate> {
     UISegmentedControl *_segmentedControl;
 }
 
