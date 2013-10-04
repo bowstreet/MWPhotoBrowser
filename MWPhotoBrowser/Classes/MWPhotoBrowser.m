@@ -23,7 +23,6 @@
 	// Data
     NSUInteger _photoCount;
     NSMutableArray *_photos;
-	NSArray *_depreciatedPhotoData; // Depreciated
 	
 	// Views
 	UIScrollView *_pagingScrollView;
@@ -150,12 +149,7 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
 	return self;
 }
 
-- (id)initWithPhotos:(NSArray *)photosArray {
-	if ((self = [self init])) {
-		_depreciatedPhotoData = photosArray;
         [self _initialisation];
-	}
-	return self;
 }
 
 - (id)initWithCoder:(NSCoder *)decoder {
@@ -625,8 +619,6 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
     if (_photoCount == NSNotFound) {
         if ([_delegate respondsToSelector:@selector(numberOfPhotosInPhotoBrowser:)]) {
             _photoCount = [_delegate numberOfPhotosInPhotoBrowser:self];
-        } else if (_depreciatedPhotoData) {
-            _photoCount = _depreciatedPhotoData.count;
         }
     }
     if (_photoCount == NSNotFound) _photoCount = 0;
@@ -639,8 +631,6 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
         if ([_photos objectAtIndex:index] == [NSNull null]) {
             if ([_delegate respondsToSelector:@selector(photoBrowser:photoAtIndex:)]) {
                 photo = [_delegate photoBrowser:self photoAtIndex:index];
-            } else if (_depreciatedPhotoData && index < _depreciatedPhotoData.count) {
-                photo = [_depreciatedPhotoData objectAtIndex:index];
             }
             if (photo) [_photos replaceObjectAtIndex:index withObject:photo];
         } else {
