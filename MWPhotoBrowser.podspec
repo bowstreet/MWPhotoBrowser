@@ -3,8 +3,8 @@ Pod::Spec.new do |s|
   s.version  = '1.1.1'
   s.license  = 'MIT'
   s.summary  = 'A simple iOS photo browser.'
-  s.homepage = 'https://github.com/mwaterfall/MWPhotoBrowser'
-  s.author   = { 'Michael Waterfall' => 'mw@d3i.com' }
+  s.homepage = 'https://github.com/bowstreet/MWPhotoBrowser'
+  s.author   = { 'Matthias Wenz' => 'mat@bowstreet.de', 'Michael Waterfall' => 'mw@d3i.com' }
   s.source   = { :git => 'https://github.com/bowstreet/MWPhotoBrowser.git', :tag => s.version.to_s }
   s.platform = :ios, '5.0'
   
